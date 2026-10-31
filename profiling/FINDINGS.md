@@ -25,3 +25,15 @@ Script: `profiling/profile_raw.py` (run from repo root). Verdict column = what t
 | 19 | Manifest | Covers 3 feeds, not ERP; counts include the truncated file | |
 
 Open: POS unit_price vs uom (CS rows) ambiguity; trip definition for telemetry (no trip id, no carrier link); service level has no delivery date.
+
+## Added during pipeline build (2026-10-31)
+
+| Finding | Evidence |
+|---|---|
+| Price is per EACH even on case (CS) rows | mean unit_price 211.76 (CS) vs 211.72 (EA). Tax on CS rows = 12% of price x raw qty, so tax and discount are understated on CS rows (they use the case count, not eaches). Limitation, not corrected |
+| Order outlet_code is unstable across versions | 319,952 of 320,000 orders have more than one outlet_code across their versions. Order-level outlet is unreliable; the latest version is used and the insert version is kept alongside |
+| Master deletes are not terminal | 33 of 48 deleted outlets have updates after the delete. Deletes recorded as deleted_at, not as a version |
+| 86 outlet versions share (key, op_ts) with another | higher __seq wins, the other goes to dq.quarantine |
+| Clock-skew correction is exact | subtracting 7h for firmware 2.1.4 restores the dt date on 100% of rows |
+| Pre-drift POS rows have no uom | 1,998,980 rows assumed EA (flagged uom_assumed) |
+| Feed-level missing-day detection finds nothing | the only outage (GW-017, 2026-02-11 and 12) is visible only at gateway x day grain |
