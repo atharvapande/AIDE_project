@@ -88,6 +88,8 @@ def build(data=None, db=None):
         "TEMP_HI": repr(C.TEMP_BAND_HI_C), "TEMP_LO": repr(C.TEMP_BAND_LO_C),
         "SKEW_FW": C.SKEW_FIRMWARE, "SKEW_HOURS": str(C.SKEW_HOURS), "IST_MIN": str(C.IST_OFFSET_MIN),
         "GROSS_QTY": "qty_eaches" if C.PRICE_BASIS == "each" else "qty_raw",
+        "ALT_QTY": "qty_raw" if C.PRICE_BASIS == "each" else "qty_eaches",
+        "ROOT": str(C.ROOT).replace("'", "''"),
     }
     print(f"price basis: {C.PRICE_BASIS}", flush=True)
     for script in sorted(SQL_DIR.glob("*.sql")):

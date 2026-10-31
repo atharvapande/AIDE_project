@@ -9,7 +9,10 @@ FROM core.pos_ranked WHERE rn > 1;
 
 -- Fact. Channel is as-of the sale (outlet SCD2); till channel kept alongside.
 -- Eaches: CS rows x eaches_per_case (uom_conversion, falling back to product case_pack).
--- Gross = extended line value before discount, ex tax. GROSS_QTY is set by KESTREL_PRICE_BASIS.
+-- Gross = extended line value before discount, ex tax.
+-- DECISION (price basis): default gross = qty_raw x unit_price (price per sale unit). Evidence: tax_amount is 12% of
+-- qty x price on case rows too, and monthly gross is flat across the 2025-10 schema change. Pricing per EACH
+-- (qty_eaches x price) makes monthly sales jump 3.7x at the schema change, so it is kept only as gross_sales_inr_alt_basis.
 CREATE OR REPLACE TABLE core.pos_sales AS
 WITH base AS (SELECT * EXCLUDE (rn) FROM core.pos_ranked WHERE rn = 1),
 j AS (
@@ -34,6 +37,7 @@ SELECT k.txn_id, k.txn_line_no, k.basket_id, k.outlet_code, k.sku_code,
   k.uom, k.uom_assumed, k.qty_raw, k.eaches_per_case, k.factor_source, k.qty_eaches,
   k.unit_price,
   round({{GROSS_QTY}} * k.unit_price, 2) AS gross_sales_inr,
+  round({{ALT_QTY}} * k.unit_price, 2) AS gross_sales_inr_alt_basis,
   k.discount_amount, k.tax_amount,
   round({{GROSS_QTY}} * k.unit_price - k.discount_amount, 2) AS net_sales_inr,
   k.payment_mode, k.promo_code, k.loyalty_id,

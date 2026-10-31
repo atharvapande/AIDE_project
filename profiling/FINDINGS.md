@@ -37,3 +37,15 @@ Open: POS unit_price vs uom (CS rows) ambiguity; trip definition for telemetry (
 | Clock-skew correction is exact | subtracting 7h for firmware 2.1.4 restores the dt date on 100% of rows |
 | Pre-drift POS rows have no uom | 1,998,980 rows assumed EA (flagged uom_assumed) |
 | Feed-level missing-day detection finds nothing | the only outage (GW-017, 2026-02-11 and 12) is visible only at gateway x day grain |
+
+## Price basis and magnitude (2026-10-31, after the mart build)
+
+| Finding | Evidence |
+|---|---|
+| Per-each pricing creates a false jump at the schema change | monthly gross INR ~30 crore to ~115 crore in 2025-10 under qty_eaches x price; flat (~30 crore) under qty x price. Default is qty x price |
+| Three magnitudes disagree | POS gross ~370 crore a year (qty x price); order header ~5,100 crore a year (320k orders x ~241k mean); the brief says ~900 crore a year. None reconciles to another |
+| Legacy report has no relationship to raw data | weekly correlation with rebuilt gross is -0.04; legacy 18-month total INR 458.9 crore against 544.8 crore Kestrel for the same weeks |
+| Channel by outlet master vs till channel moves a large share of sales | ECOM 35.7 crore at till, 98.5 crore as-of; GT 281.7 crore at till, 186.5 crore as-of |
+| Trip breach rate is a definition artifact | 75% of device-days breach; reading-level excursion rate is 7.2% in every month and every warehouse |
+| Cycle time is unusable at order level | 8 of ~141,000 scanned orders per warehouse have receive-to-dispatch within 24 hours; uncapped median ~3,900 hours |
+| No order is ever DELIVERED | status mix is one third each CONFIRMED, PICKED, DISPATCHED |

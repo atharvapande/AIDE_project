@@ -30,7 +30,7 @@ DB_PATH = _p("KESTREL_DB_PATH", "warehouse/kestrel.duckdb")
 MEMORY_LIMIT = os.environ.get("KESTREL_MEMORY_LIMIT", "")      # e.g. 6GB. Empty = DuckDB default
 
 # Judgement calls, each recorded in DECISIONS.md. Change here, rebuild.
-PRICE_BASIS = os.environ.get("KESTREL_PRICE_BASIS", "each")    # each | uom
+PRICE_BASIS = os.environ.get("KESTREL_PRICE_BASIS", "uom")     # uom: gross = qty x unit_price | each: qty_eaches x unit_price
 PARTNER_FREIGHT_FACTOR = float(os.environ.get("KESTREL_PARTNER_FACTOR", "1.085"))
 TEMP_BAND_HI_C = 8.0            # contract: excursion = any reading above the 2-8 C band
 TEMP_BAND_LO_C = 2.0
