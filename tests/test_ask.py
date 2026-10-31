@@ -86,6 +86,11 @@ if Path(C.DB_PATH).exists():
     rec, txt = run([bad, good])
     check("repair attempt can recover", rec["error"] is None)
 
+    rec, txt = run([json.dumps({"mode": "library", "interpretation": "closest KPI", "omitted": "carrier: no link",
+                                "query": "q04_cold_chain_breach", "params": {}})])
+    check("partial answer prints NOT ANSWERED and still runs", "NOT ANSWERED: carrier" in txt and rec["rows"] and rec["rows"] > 0)
+    check("worked example is in the prompt", "WORKED EXAMPLE" in A.SYSTEM and "q04_cold_chain_breach" in A.SYSTEM)
+
     rec, txt = run([json.dumps({"mode": "cannot_answer", "interpretation": "carrier breach", "reason": "no carrier link in telemetry"})])
     check("cannot_answer is reported, nothing run", "Cannot answer" in txt and rec["rows"] is None)
 

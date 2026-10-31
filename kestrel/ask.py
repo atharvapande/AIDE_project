@@ -100,6 +100,7 @@ queries given. You never state numbers yourself: you return JSON and the system 
 Reply with one JSON object and nothing else:
 {"mode": "library" | "sql" | "cannot_answer",
  "interpretation": "one sentence: how you read the question, including any assumption",
+ "omitted": "<only if part of the question cannot be answered: what was left out and why; else empty>",
  "query": "<library query name, mode=library only>",
  "params": {"<name>": "<value>"},
  "sql": "<one DuckDB SELECT, mode=sql only>",
@@ -119,6 +120,13 @@ Rules:
   nothing relevant can be computed (for example service level). Never invent a link between tables that the KPI
   notes say does not exist (telemetry has no carrier or trip id).
 - Low-confidence KPIs (trip breach, cycle time) may be answered, but say they are low confidence in interpretation.
+- cannot_answer is a LAST RESORT: use it only when no library query or table relates to the question at all.
+
+WORKED EXAMPLE (follow this pattern whenever one dimension is unavailable)
+Question: "What proportion of chilled trips breached temperature, by month and by carrier?"
+Reply: {"mode": "library", "interpretation": "Closest defined KPI: share of readings above 8C by month, plus the device-day proxy for trips",
+ "omitted": "By carrier: telemetry has no trip id or carrier link, so a carrier split cannot be computed.",
+ "query": "q04_cold_chain_breach", "params": {}}
 - Money is INR. Crore = 10,000,000.
 
 TABLES
@@ -205,6 +213,8 @@ def ask(question, client=None, db=None, model=None, out=print):
         out(f"\nCould not answer safely: {err}")
         return rec
     out(f"Interpretation: {obj.get('interpretation', '')}")
+    if obj.get("omitted"):
+        out(f"NOT ANSWERED: {obj['omitted']}")
     if obj["mode"] == "cannot_answer":
         out(f"\nCannot answer from this data: {obj.get('reason', '')}")
         return rec
