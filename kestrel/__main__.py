@@ -11,6 +11,8 @@ qp.add_argument("name", nargs="?", help="e.g. q01 (omit to list)")
 qp.add_argument("--param", "-p", action="append", default=[], help="name=value, repeatable")
 qp.add_argument("--show-sql", action="store_true")
 qp.add_argument("--limit", type=int, default=60)
+ap_ = sub.add_parser("ask", help="plain-English question; always shows the SQL it ran")
+ap_.add_argument("question")
 sub.add_parser("catalogue", help="regenerate KPI_CATALOGUE.md from catalogue/kpi_catalogue.csv")
 sub.add_parser("dq", help="print data-quality summary from the built warehouse")
 a = ap.parse_args()
@@ -26,6 +28,9 @@ elif a.cmd == "query":
             print(f"{f.stem:<36}{(first[0][3:] if first else '')[:80]}")
     else:
         q.run(a.name, dict(x.split("=", 1) for x in a.param), a.show_sql, limit=a.limit)
+elif a.cmd == "ask":
+    from . import ask as A
+    A.ask(a.question)
 elif a.cmd == "catalogue":
     from . import catalogue
     catalogue.write()

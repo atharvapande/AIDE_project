@@ -36,7 +36,7 @@ def run(name, params=None, show_sql=False, db=None, limit=60):
     for k, v in (params or {}).items():
         if k not in p:
             raise SystemExit(f"unknown parameter '{k}' for {path.stem}. Declared: {list(p) or 'none'}")
-        p[k] = v
+        p[k] = None if str(v).strip().lower() in ("", "null", "none") else v
     if show_sql:
         print(f"-- {path.name}  params={p}\n{sql}")
     con = duckdb.connect(str(db or C.DB_PATH), read_only=True)
