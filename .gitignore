@@ -1,0 +1,12 @@
+.env
+venv/
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+data/
+data_*/
+warehouse/
+*.duckdb
+*.duckdb.wal
+.ipynb_checkpoints/

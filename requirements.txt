@@ -1,0 +1,6 @@
+duckdb
+numpy
+pandas
+pyarrow
+python-dotenv
+openai
