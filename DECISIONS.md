@@ -1,7 +1,7 @@
 # DECISIONS
 
 **Built.** A DuckDB pipeline (`python -m kestrel build`, about 35 s at scale 1) from raw feeds to marts. Every row keeps
-its source file and row; every removed row is in `dq.quarantine` with a reason. A 12-KPI catalogue, nine parameterised
+its source file and row; every removed row is in `dq.quarantine` with a reason. A 12-KPI catalogue, eleven parameterised
 queries, a weekly bridge to the legacy Finance report, and `ask`: the model picks a vetted query or writes one read-only
 SELECT, and the interpretation, parameters and SQL are always printed. Evidence is in `profiling/`.
 
@@ -28,8 +28,8 @@ the data cannot support them and the catalogue says so. No forcing of the legacy
 not fixed.
 
 **Unresolved.** POS is about INR 370 crore a year, the order header about 5,100, the brief says 900. The legacy report
-has no relationship to the feed (weekly correlation -0.04); the bridge explains duplicates (INR 11 crore) and channel,
-and leaves INR 97 crore unexplained.
+has no relationship to the feed (weekly correlation -0.04). Duplicates (INR 11 crore) and channel are bridged, but the
+legacy total is still INR 97 crore BELOW its own method rebuilt from the raw feed, and nothing explains that.
 
 **Two more weeks.** Trip table and delivery timestamps from operations; the legacy script and invoices from Finance to
 settle items 1 and 8. Incremental loads with a watermark. Per-gateway freshness monitoring. An evaluation set for `ask`.

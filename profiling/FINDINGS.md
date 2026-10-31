@@ -30,7 +30,7 @@ Open: POS unit_price vs uom (CS rows) ambiguity; trip definition for telemetry (
 
 | Finding | Evidence |
 |---|---|
-| Price is per EACH even on case (CS) rows | mean unit_price 211.76 (CS) vs 211.72 (EA). Tax on CS rows = 12% of price x raw qty, so tax and discount are understated on CS rows (they use the case count, not eaches). Limitation, not corrected |
+| Price field is the same level on case and each rows (SUPERSEDED, see the price-basis section below) | mean unit_price 211.76 (CS) vs 211.72 (EA), which first suggested price per each. Later checks showed per-each pricing creates a false 3.7x jump at the schema change and the source's tax is 12% of qty x price on case rows too, so gross now uses qty x unit_price. Discount and tax on case rows use the case count |
 | Order outlet_code is unstable across versions | 319,952 of 320,000 orders have more than one outlet_code across their versions. Order-level outlet is unreliable; the latest version is used and the insert version is kept alongside |
 | Master deletes are not terminal | 33 of 48 deleted outlets have updates after the delete. Deletes recorded as deleted_at, not as a version |
 | 86 outlet versions share (key, op_ts) with another | higher __seq wins, the other goes to dq.quarantine |

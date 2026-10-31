@@ -10,3 +10,4 @@ warehouse/
 *.duckdb
 *.duckdb.wal
 .ipynb_checkpoints/
+.vscode/

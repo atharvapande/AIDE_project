@@ -51,7 +51,7 @@ files are quarantined and reported, and every dropped row is kept in `dq.quarant
 ```
 kestrel/            python package: build.py (runner), query.py, ask.py, catalogue.py
 kestrel/sql/        numbered scripts, run in order. 02-05 staging, 10-14 core, 20 data quality, 30 marts
-queries/            the SQL library (q01 ... q09), parameters declared in a header comment
+queries/            the SQL library (11 files, q01 ... q09), parameters declared in a header comment
 catalogue/          kpi_catalogue.csv is the source; KPI_CATALOGUE.md is generated from it
 profiling/          profile_raw.py and FINDINGS.md: evidence behind each data decision
 tests/              ask guardrail and routing tests
