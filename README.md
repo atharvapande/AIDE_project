@@ -8,7 +8,7 @@ Tested with Python 3.10 and DuckDB 1.5.6. One machine, no services. The shipped 
 ## Cold start
 
 ```bash
-git clone <this repo> && cd <repo>
+git clone https://github.com/atharvapande/AIDE_project.git && cd AIDE_project
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 
