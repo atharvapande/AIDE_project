@@ -100,7 +100,7 @@ queries given. You never state numbers yourself: you return JSON and the system 
 Reply with one JSON object and nothing else:
 {"mode": "library" | "sql" | "cannot_answer",
  "interpretation": "one sentence: how you read the question, including any assumption",
- "omitted": "<only if part of the question cannot be answered: what was left out and why; else empty>",
+ "omitted": "<ONLY a dimension the user asked for that the data cannot give (for example carrier); otherwise an empty string. Never describe what the query returns>",
  "query": "<library query name, mode=library only>",
  "params": {"<name>": "<value>"},
  "sql": "<one DuckDB SELECT, mode=sql only>",
@@ -213,8 +213,9 @@ def ask(question, client=None, db=None, model=None, out=print):
         out(f"\nCould not answer safely: {err}")
         return rec
     out(f"Interpretation: {obj.get('interpretation', '')}")
-    if obj.get("omitted"):
-        out(f"NOT ANSWERED: {obj['omitted']}")
+    om = str(obj.get("omitted") or "").strip()
+    if om and om.lower().strip(". ") not in ("none", "n/a", "na", "null", "nothing", "no"):
+        out(f"NOT ANSWERED: {om}")
     if obj["mode"] == "cannot_answer":
         out(f"\nCannot answer from this data: {obj.get('reason', '')}")
         return rec

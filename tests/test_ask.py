@@ -89,6 +89,9 @@ if Path(C.DB_PATH).exists():
     rec, txt = run([json.dumps({"mode": "library", "interpretation": "closest KPI", "omitted": "carrier: no link",
                                 "query": "q04_cold_chain_breach", "params": {}})])
     check("partial answer prints NOT ANSWERED and still runs", "NOT ANSWERED: carrier" in txt and rec["rows"] and rec["rows"] > 0)
+    rec, txt = run([json.dumps({"mode": "library", "interpretation": "x", "omitted": "None.",
+                                "query": "q09_service_level", "params": {}})])
+    check("'None.' in omitted is not printed", "NOT ANSWERED" not in txt)
     check("worked example is in the prompt", "WORKED EXAMPLE" in A.SYSTEM and "q04_cold_chain_breach" in A.SYSTEM)
 
     rec, txt = run([json.dumps({"mode": "cannot_answer", "interpretation": "carrier breach", "reason": "no carrier link in telemetry"})])
